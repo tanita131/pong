@@ -470,14 +470,15 @@
 			this.boardGap = 10;
 			this.paddleWidth = 8;
 			this.paddleHeight = 56;
-
 			this.gameElement = document.getElementById(this.element);
 
 			this.board = new _board2.default(this.width, this.height);
 
 			this.player1 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.boardGap, (this.height - this.paddleHeight) / 2);
+			_settings.KEYS.a, _settings.KEYS.z;
 
 			this.player2 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.width - this.boardGap - this.paddleWidth, (this.height - this.paddleHeight) / 2);
+			_settings.KEYS.up, _settings.KEYS.down;
 		}
 
 		_createClass(Game, [{
@@ -517,7 +518,8 @@
 	  z: 90, // player 1 down key
 	  up: 38, // player 2 up key
 	  down: 40, // player 2 down key
-	  spaceBar: 32 };
+	  spaceBar: 32
+	};
 
 /***/ },
 /* 11 */
@@ -587,7 +589,7 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Paddle = function () {
-	  function Paddle(boardHeight, width, height, x, y) {
+	  function Paddle(boardHeight, width, height, x, y, up, down) {
 	    _classCallCheck(this, Paddle);
 
 	    this.boardHeight = boardHeight;
@@ -597,6 +599,17 @@
 	    this.y = y;
 	    this.speed = 10;
 	    this.score = 0;
+
+	    document.addEventListener('keydown', function (event) {
+	      switch (event.keyCode) {
+	        case up:
+	          console.log('up');
+	          break;
+	        case down:
+	          console.log('down');
+	          break;
+	      }
+	    });
 	  }
 
 	  _createClass(Paddle, [{
