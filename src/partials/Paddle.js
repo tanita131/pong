@@ -31,13 +31,22 @@ down(){
   this.y = Math.min(this.boardHeight - this.height, this.y + this.speed);
 }
 
+coordinates(x, y, width, height) {
+  let leftX = x;
+  let rightX = x + width;
+  let topY = y;
+  let bottomY = y + height;
+  return [leftX, rightX, topY, bottomY];
+}
+
+
   render(svg){
       	 let Paddle = document.createElementNS(SVG_NS, 'rect');
          Paddle.setAttributeNS(null, 'x', this.x);
          Paddle.setAttributeNS(null, 'y', this.y);
 		 Paddle.setAttributeNS(null,'width', this.width);
 		 Paddle.setAttributeNS(null,'height', this.height);
-         Paddle.setAttributeNS(null, 'fill','white');
+         Paddle.setAttributeNS(null, 'fill','purple');
          svg.appendChild(Paddle);
       
   }

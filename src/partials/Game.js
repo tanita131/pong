@@ -6,6 +6,8 @@ import Paddle from './Paddle';
 
 import Ball from './Ball';
 
+import Score from './Score';
+
 export default class Game {
 
 	constructor(element, width, height) {
@@ -16,7 +18,7 @@ export default class Game {
 		this.paddleWidth =8;
 		this.paddleHeight = 56;
         this.gameElement = document.getElementById(this.element);
-
+         this.pause = false;
 
 	    this.board = new Board(this.width, this.height);
 
@@ -36,10 +38,27 @@ export default class Game {
 		 KEYS.up,
 		KEYS.down);
 
-		this.Ball=new Ball(this.radius, this.width, this.height);
+        
+		this.ball = new Ball( 8, this.width, this.height);
+		this.score1 = new Score(170, 30, 40);
+		this.score2 = new Score(320, 30, 40);
+
+		
+
+		document.addEventListener('keydown', event => {
+			switch(event.keycode){
+				case KEYS.spaceBar:
+				this.pause = !this.pause;
+				break;
+			}
+		});
 	}
 
 	render() {
+
+		 if (this.pause){
+			 return;
+		 }
 		 this.gameElement.innerHTML = '';
 		 let svg = document.createElementNS(SVG_NS, 'svg');
 		 svg.setAttributeNS(null, 'width', this.width);
@@ -48,10 +67,17 @@ export default class Game {
 		 this.gameElement.appendChild(svg);
 
 		 this.board.render(svg);
+		 this.ball.render(svg, this.player1, this.player2);
+
 		 this.player1.render(svg);
 		 this.player2.render(svg);
 
-         this.Ball.render(svg);
+
+		 this.score1.render(svg, this.player1.score);
+		 this.score2.render(svg, this.player2.score);
+		 
+
+        
 	}
 
 }
