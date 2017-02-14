@@ -36,13 +36,14 @@ export default class Game {
 		KEYS.down);
 
         this.ball = new Ball( 8, this.width, this.height);
-        this.ball1 = new Ball(60, this.width, this.height);
+        this.ball1 = new Ball(8, this.width, this.height);
+		this.ball2 = new Ball(8, this.width, this.height);
 		this.score1 = new Score(170, 30, 40);
 		this.score2 = new Score(320, 30, 40);
 
 		document.addEventListener('keydown', event => {
 			    switch(event.keycode){
-				case KEYS.spaceBar:
+				case this.spaceBar:
 				this.pause = !this.pause;
 				break;
 			}
@@ -65,6 +66,8 @@ export default class Game {
 		 this.ball.render(svg, this.player1, this.player2);
 		 if (this.player1.score >= 2){
 		 this.ball1.render(svg, this.player1, this.player2);}
+		 if (this.player1.score >= 4){
+		 this.ball2.render(svg,this.player1, this.player2);}	 
 		 this.player1.render(svg);
 		 this.player2.render(svg);
          this.score1.render(svg, this.player1.score);

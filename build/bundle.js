@@ -480,22 +480,21 @@
 			this.boardGap = 10;
 			this.paddleWidth = 8;
 			this.paddleHeight = 56;
-			this.gameElement = document.getElementById(this.element);
 			this.pause = false;
-
+			this.gameElement = document.getElementById(this.element);
 			this.board = new _board2.default(this.width, this.height);
-
 			this.player1 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.boardGap, (this.height - this.paddleHeight) / 2, _settings.KEYS.a, _settings.KEYS.z);
 
 			this.player2 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.width - this.boardGap - this.paddleWidth, (this.height - this.paddleHeight) / 2, _settings.KEYS.up, _settings.KEYS.down);
 
 			this.ball = new _Ball2.default(8, this.width, this.height);
+			this.ball1 = new _Ball2.default(60, this.width, this.height);
 			this.score1 = new _Score2.default(170, 30, 40);
 			this.score2 = new _Score2.default(320, 30, 40);
 
 			document.addEventListener('keydown', function (event) {
 				switch (event.keycode) {
-					case _settings.KEYS.spaceBar:
+					case _this.spaceBar:
 						_this.pause = !_this.pause;
 						break;
 				}
@@ -518,10 +517,11 @@
 
 				this.board.render(svg);
 				this.ball.render(svg, this.player1, this.player2);
-
+				if (this.player1.score >= 2) {
+					this.ball1.render(svg, this.player1, this.player2);
+				}
 				this.player1.render(svg);
 				this.player2.render(svg);
-
 				this.score1.render(svg, this.player1.score);
 				this.score2.render(svg, this.player2.score);
 			}
@@ -558,7 +558,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -568,36 +568,35 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Board = function () {
-	  function Board(width, height) {
-	    _classCallCheck(this, Board);
+	    function Board(width, height) {
+	        _classCallCheck(this, Board);
 
-	    this.width = width;
-	    this.height = height;
-	  }
-
-	  _createClass(Board, [{
-	    key: 'render',
-	    value: function render(svg) {
-	      var rect = document.createElementNS(_settings.SVG_NS, 'rect');
-	      rect.setAttributeNS(null, 'width', this.width);
-	      rect.setAttributeNS(null, 'height', this.height);
-	      rect.setAttributeNS(null, 'fill', '#353535');
-
-	      var line = document.createElementNS(_settings.SVG_NS, 'line');
-	      line.setAttributeNS(null, 'x1', this.width / 2);
-	      line.setAttributeNS(null, 'y1', 0);
-	      line.setAttributeNS(null, 'x2', this.width / 2);
-	      line.setAttributeNS(null, 'y2', this.height);
-	      line.setAttributeNS(null, 'stroke', 'white');
-	      line.setAttributeNS(null, 'stroke-dasharray', '20, 15');
-	      line.setAttributeNS(null, 'stroke-width', '4');
-
-	      svg.appendChild(rect);
-	      svg.appendChild(line);
+	        this.width = width;
+	        this.height = height;
 	    }
-	  }]);
 
-	  return Board;
+	    _createClass(Board, [{
+	        key: 'render',
+	        value: function render(svg) {
+	            var rect = document.createElementNS(_settings.SVG_NS, 'rect');
+	            rect.setAttributeNS(null, 'width', this.width);
+	            rect.setAttributeNS(null, 'height', this.height);
+	            rect.setAttributeNS(null, 'fill', '#353535');
+
+	            var line = document.createElementNS(_settings.SVG_NS, 'line');
+	            line.setAttributeNS(null, 'x1', this.width / 2);
+	            line.setAttributeNS(null, 'y1', 0);
+	            line.setAttributeNS(null, 'x2', this.width / 2);
+	            line.setAttributeNS(null, 'y2', this.height);
+	            line.setAttributeNS(null, 'stroke', 'white');
+	            line.setAttributeNS(null, 'stroke-dasharray', '20, 15');
+	            line.setAttributeNS(null, 'stroke-width', '4');
+	            svg.appendChild(rect);
+	            svg.appendChild(line);
+	        }
+	    }]);
+
+	    return Board;
 	}();
 
 	exports.default = Board;
@@ -707,9 +706,7 @@
 	    this.boardWidth = boardWidth;
 	    this.boardHeight = boardHeight;
 	    this.direction = 1;
-
 	    this.ping = new Audio('public/sounds/pong-01.wav');
-
 	    this.reset();
 	  }
 
@@ -718,12 +715,10 @@
 	    value: function reset() {
 	      this.x = this.boardWidth / 2;
 	      this.y = this.boardHeight / 2;
-
 	      this.vy = 0;
 	      while (this.vy === 0) {
 	        this.vy = Math.floor(Math.random() * 10 - 5);
 	      }
-
 	      this.vx = this.direction * (6 - Math.abs(this.vy));
 	    }
 	  }, {
@@ -733,7 +728,6 @@
 	      var hitRight = this.x + this.radius >= this.boardWidth;
 	      var hitTop = this.y - this.radius <= 0;
 	      var hitBottom = this.y + this.radius >= this.boardHeight;
-
 	      if (hitLeft || hitRight) {
 	        this.vx = -this.vx;
 	      } else if (hitTop || hitBottom) {
@@ -788,7 +782,6 @@
 
 	      var circle = document.createElementNS(_settings.SVG_NS, 'circle');
 	      circle.setAttributeNS(null, 'cx', this.x), circle.setAttributeNS(null, 'cy', this.y), circle.setAttributeNS(null, 'r', this.radius), circle.setAttributeNS(null, 'fill', 'pink');
-
 	      svg.appendChild(circle);
 
 	      var rightGoal = this.x + this.radius >= this.boardWidth;
@@ -816,7 +809,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -826,30 +819,30 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Score = function () {
-	  function Score(x, y, size) {
-	    _classCallCheck(this, Score);
+	    function Score(x, y, size) {
+	        _classCallCheck(this, Score);
 
-	    this.x = x;
-	    this.y = y;
-	    this.size = size;
-	  }
-
-	  _createClass(Score, [{
-	    key: 'render',
-	    value: function render(svg, scoreCount) {
-	      var score = document.createElementNS(_settings.SVG_NS, 'text');
-	      score.setAttributeNS(null, 'x', this.x);
-	      score.setAttributeNS(null, 'y', this.y);
-	      score.setAttributeNS(null, 'fill', 'white');
-	      score.setAttributeNS(null, 'font-family', 'Silkscreen Web');
-	      score.setAttributeNS(null, 'font-size', '40');
-	      score.setAttributeNS(null, 'kerning', '10');
-	      score.innerHTML = scoreCount;
-	      svg.appendChild(score);
+	        this.x = x;
+	        this.y = y;
+	        this.size = size;
 	    }
-	  }]);
 
-	  return Score;
+	    _createClass(Score, [{
+	        key: 'render',
+	        value: function render(svg, scoreCount) {
+	            var score = document.createElementNS(_settings.SVG_NS, 'text');
+	            score.setAttributeNS(null, 'x', this.x);
+	            score.setAttributeNS(null, 'y', this.y);
+	            score.setAttributeNS(null, 'fill', 'yellow');
+	            score.setAttributeNS(null, 'font-family', 'Silkscreen Web');
+	            score.setAttributeNS(null, 'font-size', '40');
+	            score.setAttributeNS(null, 'kerning', '10');
+	            score.innerHTML = scoreCount;
+	            svg.appendChild(score);
+	        }
+	    }]);
+
+	    return Score;
 	}();
 
 	exports.default = Score;
