@@ -488,7 +488,8 @@
 			this.player2 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.width - this.boardGap - this.paddleWidth, (this.height - this.paddleHeight) / 2, _settings.KEYS.up, _settings.KEYS.down);
 
 			this.ball = new _Ball2.default(8, this.width, this.height);
-			this.ball1 = new _Ball2.default(60, this.width, this.height);
+			this.ball1 = new _Ball2.default(8, this.width, this.height);
+			this.ball2 = new _Ball2.default(8, this.width, this.height);
 			this.score1 = new _Score2.default(170, 30, 40);
 			this.score2 = new _Score2.default(320, 30, 40);
 
@@ -519,6 +520,9 @@
 				this.ball.render(svg, this.player1, this.player2);
 				if (this.player1.score >= 2) {
 					this.ball1.render(svg, this.player1, this.player2);
+				}
+				if (this.player1.score >= 4) {
+					this.ball2.render(svg, this.player1, this.player2);
 				}
 				this.player1.render(svg);
 				this.player2.render(svg);
@@ -558,7 +562,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -568,35 +572,35 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Board = function () {
-	    function Board(width, height) {
-	        _classCallCheck(this, Board);
+	  function Board(width, height) {
+	    _classCallCheck(this, Board);
 
-	        this.width = width;
-	        this.height = height;
+	    this.width = width;
+	    this.height = height;
+	  }
+
+	  _createClass(Board, [{
+	    key: 'render',
+	    value: function render(svg) {
+	      var rect = document.createElementNS(_settings.SVG_NS, 'rect');
+	      rect.setAttributeNS(null, 'width', this.width);
+	      rect.setAttributeNS(null, 'height', this.height);
+	      rect.setAttributeNS(null, 'fill', '#353535');
+
+	      var line = document.createElementNS(_settings.SVG_NS, 'line');
+	      line.setAttributeNS(null, 'x1', this.width / 2);
+	      line.setAttributeNS(null, 'y1', 0);
+	      line.setAttributeNS(null, 'x2', this.width / 2);
+	      line.setAttributeNS(null, 'y2', this.height);
+	      line.setAttributeNS(null, 'stroke', 'white');
+	      line.setAttributeNS(null, 'stroke-dasharray', '20, 15');
+	      line.setAttributeNS(null, 'stroke-width', '4');
+	      svg.appendChild(rect);
+	      svg.appendChild(line);
 	    }
+	  }]);
 
-	    _createClass(Board, [{
-	        key: 'render',
-	        value: function render(svg) {
-	            var rect = document.createElementNS(_settings.SVG_NS, 'rect');
-	            rect.setAttributeNS(null, 'width', this.width);
-	            rect.setAttributeNS(null, 'height', this.height);
-	            rect.setAttributeNS(null, 'fill', '#353535');
-
-	            var line = document.createElementNS(_settings.SVG_NS, 'line');
-	            line.setAttributeNS(null, 'x1', this.width / 2);
-	            line.setAttributeNS(null, 'y1', 0);
-	            line.setAttributeNS(null, 'x2', this.width / 2);
-	            line.setAttributeNS(null, 'y2', this.height);
-	            line.setAttributeNS(null, 'stroke', 'white');
-	            line.setAttributeNS(null, 'stroke-dasharray', '20, 15');
-	            line.setAttributeNS(null, 'stroke-width', '4');
-	            svg.appendChild(rect);
-	            svg.appendChild(line);
-	        }
-	    }]);
-
-	    return Board;
+	  return Board;
 	}();
 
 	exports.default = Board;

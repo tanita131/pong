@@ -1,4 +1,4 @@
-import {SVG_NS, KEYS} from '../settings';
+import {SVG_NS,KEYS} from '../settings';
 
 import Board from './board';
 
@@ -14,63 +14,65 @@ export default class Game {
 		this.element = element;
 		this.width = width;
 		this.height = height;
-        this.boardGap = 10;
-		this.paddleWidth =8;
+		this.boardGap = 10;
+		this.paddleWidth = 8;
 		this.paddleHeight = 56;
 		this.pause = false;
-        this.gameElement = document.getElementById(this.element);
-        this.board = new Board(this.width, this.height);
+		this.gameElement = document.getElementById(this.element);
+		this.board = new Board(this.width, this.height);
 		this.player1 = new Paddle(
-		this.height,this.paddleWidth ,
-		this.paddleHeight ,this.boardGap,
-		((this.height -this.paddleHeight )/2),
-		KEYS.a,
-		KEYS.z
+			this.height, this.paddleWidth,
+			this.paddleHeight, this.boardGap,
+			((this.height - this.paddleHeight) / 2),
+			KEYS.a,
+			KEYS.z
 		);
 
 		this.player2 = new Paddle(
-		this.height, this.paddleWidth,
-		this.paddleHeight , (this.width - this.boardGap - this.paddleWidth),
-		((this.height -this.paddleHeight )/2),
-		KEYS.up,
-		KEYS.down);
+			this.height, this.paddleWidth,
+			this.paddleHeight, (this.width - this.boardGap - this.paddleWidth),
+			((this.height - this.paddleHeight) / 2),
+			KEYS.up,
+			KEYS.down);
 
-        this.ball = new Ball( 8, this.width, this.height);
-        this.ball1 = new Ball(8, this.width, this.height);
+		this.ball = new Ball(8, this.width, this.height);
+		this.ball1 = new Ball(8, this.width, this.height);
 		this.ball2 = new Ball(8, this.width, this.height);
 		this.score1 = new Score(170, 30, 40);
 		this.score2 = new Score(320, 30, 40);
 
 		document.addEventListener('keydown', event => {
-			    switch(event.keycode){
+			switch (event.keycode) {
 				case this.spaceBar:
-				this.pause = !this.pause;
-				break;
+					this.pause = !this.pause;
+					break;
 			}
-		  });
-	    }
+		});
+	}
 
-	    render() {
+	render() {
 
-		 if (this.pause){
-			 return;
-		 }
-		 this.gameElement.innerHTML = '';
-		 let svg = document.createElementNS(SVG_NS, 'svg');
-		 svg.setAttributeNS(null, 'width', this.width);
-		 svg.setAttributeNS(null, 'height', this.height);
-		 svg.setAttributeNS(null, 'viewBox', `0 0 ${this.width} ${this.height}`);
-		 this.gameElement.appendChild(svg);
+		if (this.pause) {
+			return;
+		}
+		this.gameElement.innerHTML = '';
+		let svg = document.createElementNS(SVG_NS, 'svg');
+		svg.setAttributeNS(null, 'width', this.width);
+		svg.setAttributeNS(null, 'height', this.height);
+		svg.setAttributeNS(null, 'viewBox', `0 0 ${this.width} ${this.height}`);
+		this.gameElement.appendChild(svg);
 
-		 this.board.render(svg);
-		 this.ball.render(svg, this.player1, this.player2);
-		 if (this.player1.score >= 2){
-		 this.ball1.render(svg, this.player1, this.player2);}
-		 if (this.player1.score >= 4){
-		 this.ball2.render(svg,this.player1, this.player2);}	 
-		 this.player1.render(svg);
-		 this.player2.render(svg);
-         this.score1.render(svg, this.player1.score);
-		 this.score2.render(svg, this.player2.score);
-		 }
+		this.board.render(svg);
+		this.ball.render(svg, this.player1, this.player2);
+		if (this.player1.score >= 2) {
+			this.ball1.render(svg, this.player1, this.player2);
+		}
+		if (this.player1.score >= 4) {
+			this.ball2.render(svg, this.player1, this.player2);
+		}
+		this.player1.render(svg);
+		this.player2.render(svg);
+		this.score1.render(svg, this.player1.score);
+		this.score2.render(svg, this.player2.score);
+	}
 }
