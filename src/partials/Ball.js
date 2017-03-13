@@ -71,9 +71,9 @@ export default class Ball {
     this.paddleCollision(player1, player2);
 
     let circle = document.createElementNS(SVG_NS, 'circle');
-    circle.setAttributeNS(null, 'cx', this.x),
-      circle.setAttributeNS(null, 'cy', this.y),
-      circle.setAttributeNS(null, 'r', this.radius),
+    circle.setAttributeNS(null, 'cx', this.x);
+      circle.setAttributeNS(null, 'cy', this.y);
+      circle.setAttributeNS(null, 'r', this.radius);
       circle.setAttributeNS(null, 'fill', 'pink');
     svg.appendChild(circle);
 
